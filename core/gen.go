@@ -1,5 +1,4 @@
-// go:generate go run core/gen.go core/commands_gen.go
-//+build ignore
+// +build ignore
 
 package main
 
@@ -10,12 +9,18 @@ import (
 	"text/template"
 )
 
+const (
+	commandsTemplatePath = "core/commands.go"
+	commandsJsonPath     = "core/commands.json"
+	commandsGenPath      = "core/commands_gen.go"
+)
+
 func main() {
-	bytesCommandsJSON, err := ioutil.ReadFile("commands.json")
+	bytesCommandsJSON, err := ioutil.ReadFile(commandsJsonPath)
 	if err != nil {
 		panic(err)
 	}
-	bytesCommandsTemplate, err := ioutil.ReadFile("commands.go")
+	bytesCommandsTemplate, err := ioutil.ReadFile(commandsTemplatePath)
 	if err != nil {
 		panic(err)
 	}
@@ -23,11 +28,11 @@ func main() {
 	commandsJSON := strings.TrimSuffix(string(bytesCommandsJSON), "\n")
 	params := struct{ CommandsJSON string }{CommandsJSON: commandsJSON}
 
-	out, err := os.Create("commands_gen.go")
+	out, err := os.Create(commandsGenPath)
 	if err != nil {
 		panic(err)
 	}
-	tpl, err := template.New("commands_gen.go").Parse(commandsTemplate)
+	tpl, err := template.New(commandsGenPath).Parse(commandsTemplate)
 	if err != nil {
 		panic(err)
 	}

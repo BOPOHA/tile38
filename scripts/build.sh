@@ -25,7 +25,7 @@ fi
 LDFLAGS="$LDFLAGS -X github.com/tidwall/tile38/core.BuildTime=$(date +%FT%T%z)"
 
 # Generate the core package
-core/gen.sh
+go run core/gen.go
 
 # Set final Go environment options
 LDFLAGS="$LDFLAGS -extldflags '-static'"
